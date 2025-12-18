@@ -1,21 +1,24 @@
 import type { ReactNode } from 'react';
 import { useStep } from '../../hooks/useStep';
 import StepsProgress from '../StepsProgress';
-import StepFormType1 from './TextFormType';
-import StepFormType2 from './CheckboxFormType';
+import ProfileFormType from './ProfileFormType';
+import AddressFormType from './AddressFormType';
+import { STEP_TYPE_MAP } from '../../utils/utils';
 
 const StepsForms = () => {
-	const { stepLevel, stepType, onSubmit, backStep, stepData } = useStep();
+	const { stepLevel, onSubmit, backStep, stepData } = useStep();
+
+	const stepType = STEP_TYPE_MAP[stepLevel];
 
 	const STEP_COMPONENT_MAP: Record<string, ReactNode> = {
 		TYPE1: (
-			<StepFormType1
+			<ProfileFormType
 				onSubmit={onSubmit}
 				data={stepData[stepLevel]}
 			/>
 		),
 		TYPE2: (
-			<StepFormType2
+			<AddressFormType
 				onSubmit={onSubmit}
 				data={stepData[stepLevel]}
 			/>

@@ -1,55 +1,48 @@
-import { useState } from 'react';
-import { fetchApi } from '../api/fetchApi';
-import { fetchApi2 } from '../api/fetchApi2';
+import { useReducer } from 'react';
 import { STEP } from '../types/common';
-import { STEP_BACK_MAP, STEP_TYPE_MAP } from '../utils/utils';
 import { StepContext } from '../context/StepContext';
+import { stepReducer } from '../reducers/stepReducer';
+import { fetchApi } from '../api/fetchApi';
 
 export const StepProvider = ({
 	children,
 }: {
 	children: React.ReactElement;
 }) => {
-	const [stepData, setStepData] = useState({});
-	const [currentStep, setCurrentStep] = useState(STEP.STEP1);
-
-	const stepType = STEP_TYPE_MAP[currentStep];
+	const [state, dispatch] = useReducer(stepReducer, {
+		stepLevel: STEP.STEP1,
+		stepsData: {},
+	});
 
 	const onSubmit = async (formData: Record<string, string>) => {
-		switch (stepType) {
-			case 'TYPE1': {
-				const res = await fetchApi(formData);
-				console.log('response', res, formData);
-				setStepData((prev) => {
-					return { ...prev, [currentStep]: { ...formData, res } };
-				});
-				setCurrentStep('step2');
-				break;
-			}
-			case 'TYPE2': {
-				const res = await fetchApi2(formData);
-				setStepData((prev) => {
-					return { ...prev, [currentStep]: { ...formData, res } };
-				});
-				break;
-			}
-			default:
-				return;
+		try {
+			const response = await fetchApi({
+				...formData,
+				stepLeve: state.stepLevel,
+			});
+			console.log('response', response.data);
+			// dispatch({
+			// 	type: 'add_step',
+			// 	payload: response,
+			// });
+		} catch (error) {
+			console.error(error);
 		}
 	};
 
 	const backStep = () => {
-		setCurrentStep(STEP_BACK_MAP[currentStep]);
+		dispatch({
+			type: 'previous_step',
+		});
 	};
 
 	return (
 		<StepContext
 			value={{
-				stepLevel: currentStep,
+				stepLevel: state.stepLevel,
 				onSubmit,
-				stepType,
 				backStep,
-				stepData,
+				stepData: state.stepsData,
 			}}>
 			{children}
 		</StepContext>

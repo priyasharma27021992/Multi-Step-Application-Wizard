@@ -18,13 +18,12 @@ export const StepProvider = ({
 		try {
 			const response = await fetchApi({
 				...formData,
-				stepLeve: state.stepLevel,
+				stepLevel: state.stepLevel,
 			});
-			console.log('response', response.data);
-			// dispatch({
-			// 	type: 'add_step',
-			// 	payload: response,
-			// });
+			dispatch({
+				type: 'add_step',
+				payload: response,
+			});
 		} catch (error) {
 			console.error(error);
 		}

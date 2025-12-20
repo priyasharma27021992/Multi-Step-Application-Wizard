@@ -9,7 +9,7 @@ const GENDER_OPTIONS: Record<string, string> = {
 
 type GenderType = keyof typeof GENDER_OPTIONS;
 
-interface TextFormTypeProps {
+interface ProfileFormProps {
 	onSubmit: (obj: object) => void;
 	data?: {
 		firstName?: string;
@@ -22,11 +22,7 @@ interface TextFormTypeProps {
 	className?: string;
 }
 
-const TextFormType = ({
-	onSubmit,
-	data,
-	className = '',
-}: TextFormTypeProps) => {
+const ProfileForm = ({ onSubmit, data, className = '' }: ProfileFormProps) => {
 	const [formData, setFormData] = useState({
 		firstName: data?.firstName ?? '',
 		lastName: data?.lastName ?? '',
@@ -73,7 +69,7 @@ const TextFormType = ({
 			<input
 				placeholder='Phone'
 				type='tel'
-				pattern='[+][0-9]{2}-[0-9]{10}'
+				// pattern='[+][0-9]{2}-[0-9]{10}'
 				onChange={(e) => handleChange('phone', e)}
 				value={formData.phone}
 			/>
@@ -89,7 +85,11 @@ const TextFormType = ({
 				value={formData.gender}
 				onChange={(e) => handleChange('gender', e)}>
 				{Object.keys(GENDER_OPTIONS).map((opt) => (
-					<option value={opt}>{GENDER_OPTIONS[opt]}</option>
+					<option
+						key={opt}
+						value={opt}>
+						{GENDER_OPTIONS[opt]}
+					</option>
 				))}
 			</select>
 			<button type='submit'>Submit</button>
@@ -97,4 +97,4 @@ const TextFormType = ({
 	);
 };
 
-export default TextFormType;
+export default ProfileForm;

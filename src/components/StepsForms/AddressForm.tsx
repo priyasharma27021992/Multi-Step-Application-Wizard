@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-interface CheckboxFormTypeProps {
+interface AddressFormProps {
 	onSubmit: (obj: object) => void;
 	data?: {
 		addressLine1?: string;
@@ -13,11 +13,7 @@ interface CheckboxFormTypeProps {
 	className?: string;
 }
 
-const CheckboxFormType = ({
-	onSubmit,
-	data,
-	className = '',
-}: CheckboxFormTypeProps) => {
+const AddressForm = ({ onSubmit, data, className = '' }: AddressFormProps) => {
 	const [formData, setFormData] = useState({
 		addressLine1: data?.addressLine1 ?? '',
 		addressLine2: data?.addressLine2 ?? '',
@@ -27,7 +23,8 @@ const CheckboxFormType = ({
 		postalCode: data?.postalCode ?? '',
 	});
 
-	const handleSubmit = () => {
+	const handleSubmit = (e: FormDataEvent) => {
+		e.preventDefault();
 		onSubmit?.(formData);
 	};
 
@@ -87,4 +84,4 @@ const CheckboxFormType = ({
 	);
 };
 
-export default CheckboxFormType;
+export default AddressForm;

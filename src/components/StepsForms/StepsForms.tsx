@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react';
 import { useStep } from '../../hooks/useStep';
 import StepsProgress from '../StepsProgress';
-import ProfileFormType from './ProfileFormType';
-import AddressFormType from './AddressFormType';
+import ProfileForm from './ProfileForm';
+import AddressForm from './AddressForm';
 import { STEP_TYPE_MAP } from '../../utils/utils';
+import UserPreferencesForm from './UserPreferencesForm';
 
 const StepsForms = () => {
 	const { stepLevel, onSubmit, backStep, stepData } = useStep();
@@ -12,13 +13,19 @@ const StepsForms = () => {
 
 	const STEP_COMPONENT_MAP: Record<string, ReactNode> = {
 		TYPE1: (
-			<ProfileFormType
+			<ProfileForm
 				onSubmit={onSubmit}
 				data={stepData[stepLevel]}
 			/>
 		),
 		TYPE2: (
-			<AddressFormType
+			<AddressForm
+				onSubmit={onSubmit}
+				data={stepData[stepLevel]}
+			/>
+		),
+		TYPE3: (
+			<UserPreferencesForm
 				onSubmit={onSubmit}
 				data={stepData[stepLevel]}
 			/>

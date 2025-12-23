@@ -1,5 +1,7 @@
-import { useState, type ChangeEvent } from 'react';
+import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { formatDate } from '../../utils/commonFunctions';
+import classNames from 'classnames';
+import { useForm } from '../../hooks/useForm';
 
 const TECH_OPTIONS = [
 	'javascript',
@@ -12,30 +14,33 @@ const TECH_OPTIONS = [
 	'docker',
 	'datastructures',
 ];
-const UserPreferencesForm = ({ data }) => {
-	const [formData, setFormData] = useState({
-		experience: data?.experience ?? 0,
-		technologies: data?.technologies ?? [],
-		doj: data?.doj ?? '',
-	});
-	const handleChange = (
-		name: string,
-		e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
-	) => {
-		const value =
-			e.target.type === 'select-multiple'
-				? [...e.target.selectedOptions]?.map((opt) => opt.value)
-				: e.target.value;
-		setFormData((prev) => ({
-			...prev,
-			[name]: value,
-		}));
+const UserPreferencesForm = ({ data, onSubmit, className }) => {
+	const { formData, handleChange } = useForm(data);
+	// const handleChange = (
+	// 	name: string,
+	// 	e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>
+	// ) => {
+	// 	const value =
+	// 		e.target.type === 'select-multiple'
+	// 			? [...e.target.selectedOptions]?.map((opt) => opt.value)
+	// 			: e.target.value;
+	// 	setFormData((prev) => ({
+	// 		...prev,
+	// 		[name]: value,
+	// 	}));
+	// };
+
+	const handleSubmit = (e: FormEvent) => {
+		e.preventDefault();
+		onSubmit(formData);
 	};
 
 	console.log('formData baby', formData);
 
 	return (
-		<form>
+		<form
+			onSubmit={handleSubmit}
+			className={classNames('flex flex-row gap-1', className)}>
 			<label htmlFor='experience'>
 				React Experience in Number of Years
 				<input
@@ -46,16 +51,18 @@ const UserPreferencesForm = ({ data }) => {
 					onChange={(e) => handleChange('experience', e)}
 				/>
 			</label>
-			<label htmlFor='technologies'></label>
-			<select
-				id='technologies'
-				value={formData.technologies}
-				onChange={(e) => handleChange('technologies', e)}
-				multiple>
-				{TECH_OPTIONS.map((opt) => (
-					<option value={opt}>{opt}</option>
-				))}
-			</select>
+			<label htmlFor='technologies'>
+				Technologies:
+				<select
+					id='technologies'
+					value={formData.technologies}
+					onChange={(e) => handleChange('technologies', e)}
+					multiple>
+					{TECH_OPTIONS.map((opt) => (
+						<option value={opt}>{opt}</option>
+					))}
+				</select>
+			</label>
 			<label htmlFor='DOJ'>Date of Joining</label>
 			<input
 				id='doj'
@@ -64,6 +71,7 @@ const UserPreferencesForm = ({ data }) => {
 				value={formData.doj}
 				onChange={(e) => handleChange('doj', e)}
 			/>
+			<button type='submit'>Submit</button>
 		</form>
 	);
 };

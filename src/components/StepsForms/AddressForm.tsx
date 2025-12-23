@@ -1,82 +1,64 @@
-import { useState } from 'react';
+import classNames from 'classnames';
+import { useForm } from '../../hooks/useForm';
+import type { AddressFormValues } from '../../types/formData';
+import type { FormEvent } from 'react';
 
 interface AddressFormProps {
 	onSubmit: (obj: object) => void;
-	data?: {
-		addressLine1?: string;
-		addressLine2?: string;
-		city?: string;
-		state?: string;
-		country?: string;
-		postalCode?: string;
-	};
+	data?: AddressFormValues;
 	className?: string;
 }
 
 const AddressForm = ({ onSubmit, data, className = '' }: AddressFormProps) => {
-	const [formData, setFormData] = useState({
-		addressLine1: data?.addressLine1 ?? '',
-		addressLine2: data?.addressLine2 ?? '',
-		city: data?.city ?? '',
-		state: data?.state ?? '',
-		country: data?.country ?? '',
-		postalCode: data?.postalCode ?? '',
-	});
+	const { formData, handleChange } = useForm<AddressFormValues>(data);
 
-	const handleSubmit = (e: FormDataEvent) => {
+	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		onSubmit?.(formData);
 	};
 
-	const handleChange = (
-		name: string,
-		e: React.ChangeEvent<HTMLInputElement>
-	) => {
-		setFormData((prev) => ({ ...prev, [name]: e.target.value }));
-	};
-
 	return (
 		<form
-			className={className}
+			className={classNames('flex flex-row gap-1', className)}
 			onSubmit={handleSubmit}>
 			<input
 				name='addressLine1'
 				placeholder='Address Line 1'
 				required
-				onChange={(e) => handleChange('addressLine1', e)}
+				onChange={(e) => handleChange('addressLine1', e.target.value)}
 				value={formData.addressLine1}
 			/>
 			<input
 				name='addressLine2'
 				placeholder='Address Line 2'
 				required
-				onChange={(e) => handleChange('addressLine2', e)}
+				onChange={(e) => handleChange('addressLine2', e.target.value)}
 				value={formData.addressLine2}
 			/>
 			<input
 				name='city'
 				placeholder='City'
-				onChange={(e) => handleChange('city', e)}
+				onChange={(e) => handleChange('city', e.target.value)}
 				value={formData.city}
 			/>
 			<input
 				name='state'
 				placeholder='State'
-				onChange={(e) => handleChange('state', e)}
+				onChange={(e) => handleChange('state', e.target.value)}
 				value={formData.state}
 			/>
 			<input
 				name='country'
 				placeholder='Country'
 				required
-				onChange={(e) => handleChange('country', e)}
+				onChange={(e) => handleChange('country', e.target.value)}
 				value={formData.country}
 			/>
 			<input
 				name='postalCode'
 				placeholder='Postal Code'
 				required
-				onChange={(e) => handleChange('postalCode', e)}
+				onChange={(e) => handleChange('postalCode', e.target.value)}
 				value={formData.postalCode}
 			/>
 			<button type='submit'>Submit</button>

@@ -78,6 +78,13 @@ button:focus-visible {
   gap: 16px
 }
 
+.border-1-black {
+  border: 1px solid #1a1a1a;
+}
+
+.padding-2 {
+  padding: 16px;
+}
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

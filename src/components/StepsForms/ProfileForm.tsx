@@ -1,47 +1,20 @@
-import { useState } from 'react';
 import classnames from 'classnames';
-
-const GENDER_OPTIONS: Record<string, string> = {
-	MALE: 'Male',
-	FEMALE: 'Female',
-	PREFER_NOT_TO_SAY: 'PREFER NOT TO SAY',
-};
-
-type GenderType = keyof typeof GENDER_OPTIONS;
+import { useForm } from '../../hooks/useForm';
+import type { ProfileFormValues } from '../../types/formData';
+import { GENDER_OPTIONS } from '../../types/common';
 
 interface ProfileFormProps {
 	onSubmit: (obj: object) => void;
-	data?: {
-		firstName?: string;
-		lastName?: string;
-		email?: string;
-		phone?: string;
-		dob?: string;
-		gender?: GenderType;
-	};
+	data?: ProfileFormValues;
 	className?: string;
 }
 
 const ProfileForm = ({ onSubmit, data, className = '' }: ProfileFormProps) => {
-	const [formData, setFormData] = useState({
-		firstName: data?.firstName ?? '',
-		lastName: data?.lastName ?? '',
-		email: data?.email ?? '',
-		phone: data?.phone ?? '',
-		dob: data?.dob ?? '',
-		gender: data?.gender ?? '',
-	});
+	const { formData, handleChange } = useForm<ProfileFormValues>(data);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		onSubmit?.(formData);
-	};
-
-	const handleChange = (
-		name: string,
-		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-	) => {
-		setFormData((prev) => ({ ...prev, [name]: e.target.value }));
 	};
 
 	return (
@@ -51,26 +24,26 @@ const ProfileForm = ({ onSubmit, data, className = '' }: ProfileFormProps) => {
 			<input
 				placeholder='FirstName'
 				required
-				onChange={(e) => handleChange('firstName', e)}
+				onChange={(e) => handleChange('firstName', e.target.value)}
 				value={formData.firstName}
 			/>
 			<input
 				placeholder='LastName'
-				onChange={(e) => handleChange('lastName', e)}
+				onChange={(e) => handleChange('lastName', e.target.value)}
 				value={formData.lastName}
 			/>
 			<input
 				placeholder='Email'
 				required
 				type='email'
-				onChange={(e) => handleChange('email', e)}
+				onChange={(e) => handleChange('email', e.target.value)}
 				value={formData.email}
 			/>
 			<input
 				placeholder='Phone'
 				type='tel'
 				// pattern='[+][0-9]{2}-[0-9]{10}'
-				onChange={(e) => handleChange('phone', e)}
+				onChange={(e) => handleChange('phone', e.target.value)}
 				value={formData.phone}
 			/>
 			<input
@@ -78,12 +51,12 @@ const ProfileForm = ({ onSubmit, data, className = '' }: ProfileFormProps) => {
 				type='date'
 				min='1970-01-01'
 				max='2003-01-01'
-				onChange={(e) => handleChange('dob', e)}
+				onChange={(e) => handleChange('dob', e.target.value)}
 				value={formData.dob}
 			/>
 			<select
 				value={formData.gender}
-				onChange={(e) => handleChange('gender', e)}>
+				onChange={(e) => handleChange('gender', e.target.value)}>
 				{Object.keys(GENDER_OPTIONS).map((opt) => (
 					<option
 						key={opt}

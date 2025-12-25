@@ -1,0 +1,39 @@
+.progress {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    margin: 40px auto;
+}
+
+.progress__line{
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #dcdcdc;
+    transform: translateY(-50%);
+    z-index: 0;
+}
+
+.progress__step{
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #dcdcdc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.progress__step__active{
+    border-color: #1976d2;
+    background: #1976d2;
+    color: white;
+}

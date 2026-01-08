@@ -14,7 +14,7 @@ export const MyInformation = ({ data, onSubmit }) => {
 		isExEmployee: data?.isExEmployee ?? '',
 		country: data?.country ?? '',
 		firstName: data?.firstName ?? '',
-		familyName: data?.firstName ?? '',
+		familyName: data?.familyName ?? '',
 		addressLine1: data?.addressLine1 ?? '',
 		addressLine2: data?.addressLine2 ?? '',
 		city: data?.city ?? '',
@@ -27,8 +27,13 @@ export const MyInformation = ({ data, onSubmit }) => {
 
 	const handleChange = (name: string, value: string | boolean) => {
 		setFormData((prev) => ({
+			...prev,
 			[name]: value,
 		}));
+	};
+
+	const handleSubmit = () => {
+		onSubmit(formData);
 	};
 
 	return (
@@ -94,12 +99,12 @@ export const MyInformation = ({ data, onSubmit }) => {
 					/>
 				</div>
 				<div>
-					<label>Family Name:</label>
+					<label>Family Name/Last Name:</label>
 					<input
 						type='text'
 						value={formData?.familyName}
 						onChange={(e: ChangeEvent<HTMLInputElement>) =>
-							handleChange('lastName', e.target.value)
+							handleChange('familyName', e.target.value)
 						}
 					/>
 				</div>
@@ -112,6 +117,9 @@ export const MyInformation = ({ data, onSubmit }) => {
 					<input
 						type='text'
 						value={formData.addressLine1}
+						onChange={(e: ChangeEvent<HTMLInputElement>) =>
+							handleChange('addressLine1', e.target.value)
+						}
 					/>
 				</div>
 				<div>
@@ -119,6 +127,9 @@ export const MyInformation = ({ data, onSubmit }) => {
 					<input
 						type='textarea'
 						value={formData.addressLine2}
+						onChange={(e: ChangeEvent<HTMLInputElement>) =>
+							handleChange('addressLine2', e.target.value)
+						}
 					/>
 				</div>
 				<div>
@@ -126,6 +137,9 @@ export const MyInformation = ({ data, onSubmit }) => {
 					<input
 						type='text'
 						value={formData.city}
+						onChange={(e: ChangeEvent<HTMLInputElement>) =>
+							handleChange('city', e.target.value)
+						}
 					/>
 				</div>
 				<div>
@@ -133,6 +147,9 @@ export const MyInformation = ({ data, onSubmit }) => {
 					<input
 						type='text'
 						value={formData.state}
+						onChange={(e: ChangeEvent<HTMLInputElement>) =>
+							handleChange('state', e.target.value)
+						}
 					/>
 				</div>
 				<div>
@@ -140,6 +157,9 @@ export const MyInformation = ({ data, onSubmit }) => {
 					<input
 						type='number'
 						value={formData.state}
+						onChange={(e: ChangeEvent<HTMLInputElement>) =>
+							handleChange('postcode', e.target.value)
+						}
 					/>
 				</div>
 			</div>
@@ -152,14 +172,18 @@ export const MyInformation = ({ data, onSubmit }) => {
 			<div>
 				<p>Phone</p>
 				<div>
-					<select value={formData.phoneDeviceType}>
+					<select
+						value={formData.phoneDeviceType}
+						onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+							handleChange('phoneDeviceType', e.target.value)
+						}>
 						{['phone', 'tel'].map((opt) => (
 							<option value={opt}>{opt}</option>
 						))}
 					</select>
 				</div>
 			</div>
-			<button onChange={handleChange}>Save and Proceed</button>
+			<button onClick={handleSubmit}>Save and Next</button>
 		</form>
 	);
 };

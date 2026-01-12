@@ -64,11 +64,31 @@ const formConfig = [
 
 const DynamicForm = () => {
 	const [formData, setFormData] = useState({
-		country: '',
-		customCountry: '',
-		state: '',
-		usaState: '',
-		postalCode: '',
+		country: {
+			value: '',
+			dependsOn: [],
+			showIf: '',
+		},
+		customCountry: {
+			value: '',
+			dependsOn: ['country'],
+			showIf: '',
+		},
+		state: {
+			value: '',
+			dependsOn: [],
+			showIf: '',
+		},
+		usaState: {
+			value: '',
+			dependsOn: [],
+			showIf: '',
+		},
+		postalCode: {
+			value: '',
+			dependsOn: [],
+			showIf: '',
+		},
 	});
 
 	const handleChange = (name, value) => {

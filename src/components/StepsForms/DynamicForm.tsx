@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 const formConfig = [
 	{
@@ -62,69 +62,35 @@ const formConfig = [
 //postalCode depends on state and usaState
 //state depends on country
 
-const DynamicForm = () => {
-	const [formData, setFormData] = useState({
-		country: {
-			value: '',
-			dependsOn: [],
-			showIf: '',
-		},
-		customCountry: {
-			value: '',
-			dependsOn: ['country'],
-			showIf: '',
-		},
-		state: {
-			value: '',
-			dependsOn: [],
-			showIf: '',
-		},
-		usaState: {
-			value: '',
-			dependsOn: [],
-			showIf: '',
-		},
-		postalCode: {
-			value: '',
-			dependsOn: [],
-			showIf: '',
-		},
-	});
+function shouldShowField(field, values) {
+	const { dependsOn, showIf } = field;
 
-	const handleChange = (name, value) => {
-		setFormData((prev) => ({
-			...prev,
-			[name]: value,
-		}));
-	};
+	if (!dependsOn) return true;
 
-	const getFormFields = (field) => {
-		if (field.type === 'select') {
-			return (
-				<select onChange={(e) => handleChange(field.name, e.target.value)}>
-					{field.options.map((option) => (
-						<option value={option.name}>{option.label}</option>
-					))}
-				</select>
-			);
-		}
-		if (field.type === 'text') {
-			return (
-				<input
-					value={formData[field.name]}
-					onChange={(e) => handleChange(field.name, e.target.value)}
-				/>
-			);
-		}
-	};
+	if (typeof showIf === 'function') return !!showIf(values);
 
-	return (
-		<form>
-			{formConfig?.map((field) => {
-				return getFormFields(field);
-			})}
-		</form>
-	);
+	if (typeof dependsOn === 'string') {
+		if (showIf === undefined) return !!values[dependsOn];
+		return values[dependsOn] === showIf;
+	}
+
+	if (Array.isArray(dependsOn)) {
+		if (typeof showIf === 'string')
+			return dependsOn.some((dep) => values[dep] === showIf);
+	}
+}
+
+const DynamicForm = ({ config }) => {
+	const [values, setValues] = useState({});
+	const [errors, setErrors] = useState({});
+
+	const visibleFields = useMemo(() => {
+		return config.filter((f) => shouldShowField(f, values));
+	}, [config, values]);
+
+	const handleSubmit = () => {};
+
+	return <form onSubmit={handleSubmit}></form>;
 };
 
 export { DynamicForm };
